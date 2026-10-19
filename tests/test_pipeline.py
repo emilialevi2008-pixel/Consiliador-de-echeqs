@@ -2,7 +2,11 @@ import unittest
 from datetime import date
 from decimal import Decimal
 
-from src.pipeline import convertir_fila, preparar_filas
+from src.pipeline import (
+    convertir_fila,
+    preparar_filas,
+    detectar_duplicados
+)
 
 
 class TestPipeline(unittest.TestCase):
@@ -109,6 +113,55 @@ class TestPipeline(unittest.TestCase):
             cambios["IMPORTE"]["despues"],
             "15000.50"
         )
+    def test_detectar_identificadores_duplicados(self):
+        filas = [
+            {
+                "ID CHEQUE": "MKX9R4GY",
+                "FECHA DE COBRO": "19/10/2026",
+                "IMPORTE": "15000.50"
+            },
+            {
+                "ID CHEQUE": "ABC123",
+                "FECHA DE COBRO": "20/10/2026",
+                "IMPORTE": "20000.00"
+            },
+            {
+                "ID CHEQUE": "MKX9R4GY",
+                "FECHA DE COBRO": "21/10/2026",
+                "IMPORTE": "16000.00"
+            }
+        ]
 
+        preparados, _ = preparar_filas(filas, "sistema")
+        duplicados = detectar_duplicados(preparados)
+
+        self.assertEqual(
+            duplicados,
+            {"MKX9R4GY": [1, 3]}
+        )
+
+        self.assertEqual(len(preparados), 3)
+
+    def test_identificadores_sin_duplicados(self):
+        filas = [
+            {
+                "ID Cheque": "MKX9R4GYWZK9O6W",
+                "Fecha Pago": "19/10/2026",
+                "Importe": "15000.50"
+            },
+            {
+                "ID Cheque": "ABC123XYZ",
+                "Fecha Pago": "20/10/2026",
+                "Importe": "20000.00"
+            }
+        ]
+
+        preparados, _ = preparar_filas(filas, "banco")
+
+        self.assertEqual(
+            detectar_duplicados(preparados),
+            {}
+        )
+        
 if __name__ == "__main__":
     unittest.main()

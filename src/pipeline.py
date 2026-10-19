@@ -103,3 +103,24 @@ def preparar_filas(filas, origen):
             })
 
     return preparados, registro
+def detectar_duplicados(registros):
+    """Encuentra los identificadores que aparecen más de una vez."""
+
+    filas_por_id = {}
+
+    for registro in registros:
+        identificador = registro["cheque"].identificador
+        numero_fila = registro["fila"]
+
+        if identificador not in filas_por_id:
+            filas_por_id[identificador] = []
+
+        filas_por_id[identificador].append(numero_fila)
+
+    duplicados = {}
+
+    for identificador, filas in filas_por_id.items():
+        if len(filas) > 1:
+            duplicados[identificador] = filas
+
+    return duplicados
