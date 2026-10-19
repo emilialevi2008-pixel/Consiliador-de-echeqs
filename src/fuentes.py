@@ -1,3 +1,4 @@
+from openpyxl import load_workbook
 import csv
 import json
 from abc import ABC, abstractmethod
@@ -55,3 +56,56 @@ class FuenteJSON(FuenteDatos):
             raise ValueError("Cada registro del JSON debe ser un objeto.")
 
         return datos
+class FuenteExcel(FuenteDatos):
+    """Lee la primera hoja de un archivo Excel."""
+
+    def cargar(self, ruta):
+        libro = load_workbook(
+            ruta,
+            read_only=True,
+            data_only=True
+        )
+
+        try:
+            hoja = libro.worksheets[0]
+            filas = hoja.iter_rows(values_only=True)
+            encabezados = next(filas, None)
+
+            if not encabezados:
+                raise ValueError("El Excel está vacío.")
+
+            if any(
+                not isinstance(nombre, str) or not nombre.strip()
+                for nombre in encabezados
+            ):
+                raise ValueError(
+                    "Cada columna del Excel debe tener un encabezado."
+                )
+
+            encabezados = [
+                nombre.strip() for nombre in encabezados
+            ]
+
+            if len(encabezados) != len(set(encabezados)):
+                raise ValueError(
+                    "El Excel tiene encabezados repetidos."
+                )
+
+            datos = []
+
+            for fila in filas:
+                if all(valor is None for valor in fila):
+                    continue
+
+                registro = dict(zip(encabezados, fila))
+                datos.append(registro)
+
+            if not datos:
+                raise ValueError(
+                    "El Excel no contiene registros."
+                )
+
+            return datos
+
+        finally:
+            libro.close()
