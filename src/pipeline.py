@@ -156,3 +156,55 @@ def buscar_candidatos(identificador_sistema, registros_banco):
             candidatos.append(registro)
 
     return candidatos
+def comparar_registros(registro_banco, registro_sistema):
+    """Compara un par de registros relacionados por su identificador."""
+
+    banco = registro_banco["cheque"]
+    sistema = registro_sistema["cheque"]
+
+    if not banco.identificador.startswith(sistema.identificador):
+        raise ValueError("Los identificadores no corresponden.")
+
+    errores = banco.diferencias(sistema)
+    descripciones = []
+
+    if "ERROR_IMPORTE" in errores:
+        descripciones.append(
+            f"Importes diferentes: banco {banco.importe:.2f}; "
+            f"sistema {sistema.importe:.2f}."
+        )
+
+    if "ERROR_FECHA" in errores:
+        descripciones.append(
+            f"Fechas diferentes: banco {mostrar_fecha(banco.fecha_pago)}; "
+            f"sistema {mostrar_fecha(sistema.fecha_pago)}."
+        )
+
+    if len(errores) == 2:
+        estado = "CON_DIFERENCIAS"
+    elif len(errores) == 1:
+        estado = errores[0]
+    elif banco.identificador == sistema.identificador:
+        estado = "CONCILIADO"
+    else:
+        estado = "CONCILIADO_ID_ABREVIADO"
+
+    if not errores:
+        descripciones.append("Coinciden el importe y la fecha de pago.")
+
+    return {
+        "id_banco": banco.identificador,
+        "id_sistema": sistema.identificador,
+        "importe_banco": format(banco.importe, ".2f"),
+        "importe_sistema": format(sistema.importe, ".2f"),
+        "diferencia_importe": format(
+            banco.diferencia_importe(sistema), ".2f"
+        ),
+        "fecha_banco": mostrar_fecha(banco.fecha_pago),
+        "fecha_sistema": mostrar_fecha(sistema.fecha_pago),
+        "estado": estado,
+        "tipo_error": "|".join(errores),
+        "descripcion": " ".join(descripciones),
+        "fila_banco": registro_banco["fila"],
+        "fila_sistema": registro_sistema["fila"]
+    }

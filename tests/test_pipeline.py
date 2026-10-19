@@ -6,7 +6,8 @@ from src.pipeline import (
     convertir_fila,
     preparar_filas,
     detectar_duplicados,
-    buscar_candidatos
+    buscar_candidatos,
+    comparar_registros
 )
 
 
@@ -238,6 +239,101 @@ class TestPipeline(unittest.TestCase):
             buscar_candidatos("MKX9R4GY", banco),
             []
         )
-        
+    def test_comparar_cheques_con_id_exacto(self):
+        banco, _ = preparar_filas([
+            {
+                "ID Cheque": "ABC123",
+                "Fecha Pago": "19/10/2026",
+                "Importe": "15000.50"
+            }
+        ], "banco")
+
+        sistema, _ = preparar_filas([
+            {
+                "ID CHEQUE": "ABC123",
+                "FECHA DE COBRO": "19/10/2026",
+                "IMPORTE": "15000.50"
+            }
+        ], "sistema")
+
+        resultado = comparar_registros(banco[0], sistema[0])
+
+        self.assertEqual(resultado["estado"], "CONCILIADO")
+        self.assertEqual(resultado["tipo_error"], "")
+        self.assertEqual(resultado["diferencia_importe"], "0.00")
+
+    def test_comparar_cheques_con_id_abreviado(self):
+        banco, _ = preparar_filas([
+            {
+                "ID Cheque": "MKX9R4GYWZK9O6W",
+                "Fecha Pago": "19/10/2026",
+                "Importe": "15000.50"
+            }
+        ], "banco")
+
+        sistema, _ = preparar_filas([
+            {
+                "ID CHEQUE": "MKX9R4GY",
+                "FECHA DE COBRO": "2026-10-19",
+                "IMPORTE": "15000,50"
+            }
+        ], "sistema")
+
+        resultado = comparar_registros(banco[0], sistema[0])
+
+        self.assertEqual(
+            resultado["estado"],
+            "CONCILIADO_ID_ABREVIADO"
+        )
+        self.assertEqual(resultado["fecha_sistema"], "19/10/2026")
+
+    def test_comparar_con_dos_diferencias(self):
+        banco, _ = preparar_filas([
+            {
+                "ID Cheque": "ABC123",
+                "Fecha Pago": "19/10/2026",
+                "Importe": "15000.50"
+            }
+        ], "banco")
+
+        sistema, _ = preparar_filas([
+            {
+                "ID CHEQUE": "ABC123",
+                "FECHA DE COBRO": "20/10/2026",
+                "IMPORTE": "14000.50"
+            }
+        ], "sistema")
+
+        resultado = comparar_registros(banco[0], sistema[0])
+
+        self.assertEqual(resultado["estado"], "CON_DIFERENCIAS")
+        self.assertEqual(
+            resultado["tipo_error"],
+            "ERROR_IMPORTE|ERROR_FECHA"
+        )
+        self.assertEqual(resultado["diferencia_importe"], "1000.00")
+        self.assertIn("19/10/2026", resultado["descripcion"])
+        self.assertIn("20/10/2026", resultado["descripcion"])
+
+    def test_rechazar_comparacion_de_ids_distintos(self):
+        banco, _ = preparar_filas([
+            {
+                "ID Cheque": "ABC123",
+                "Fecha Pago": "19/10/2026",
+                "Importe": "15000.50"
+            }
+        ], "banco")
+
+        sistema, _ = preparar_filas([
+            {
+                "ID CHEQUE": "XYZ789",
+                "FECHA DE COBRO": "19/10/2026",
+                "IMPORTE": "15000.50"
+            }
+        ], "sistema")
+
+        with self.assertRaises(ValueError):
+            comparar_registros(banco[0], sistema[0])
+            
 if __name__ == "__main__":
     unittest.main()
