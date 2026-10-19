@@ -1,0 +1,17 @@
+# Entornos de Python
+.venv/
+venv/
+
+# Archivos temporales de Python
+__pycache__/
+*.pyc
+
+# Archivos de macOS y Excel
+.DS_Store
+~$*.xlsx
+
+# Configuración privada
+.env
+
+# Reportes generados
+outputs/
