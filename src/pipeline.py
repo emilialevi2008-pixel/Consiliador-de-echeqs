@@ -1,6 +1,9 @@
 from src.modelos import ChequeElectronico
-from src.validaciones import convertir_fecha, convertir_importe
-
+from src.validaciones import (
+    convertir_fecha,
+    convertir_importe,
+    mostrar_fecha
+)
 
 COLUMNAS = {
     "banco": {
@@ -39,3 +42,64 @@ def convertir_fila(fila, origen):
         importe,
         fecha_pago
     )
+def preparar_filas(filas, origen):
+    """Prepara las filas y registra rechazos y modificaciones."""
+
+    if origen not in COLUMNAS:
+        raise ValueError("El origen debe ser banco o sistema.")
+
+    preparados = []
+    registro = []
+
+    for numero, fila in enumerate(filas, start=1):
+        original = fila.copy()
+
+        try:
+            cheque = convertir_fila(fila, origen)
+
+        except ValueError as error:
+            registro.append({
+                "origen": origen,
+                "fila": numero,
+                "estado": "rechazada",
+                "motivo": str(error),
+                "original": original
+            })
+            continue
+
+        preparados.append({
+            "origen": origen,
+            "fila": numero,
+            "cheque": cheque,
+            "original": original
+        })
+
+        columnas = COLUMNAS[origen]
+
+        normalizados = {
+            columnas["identificador"]: cheque.identificador,
+            columnas["importe"]: format(cheque.importe, ".2f"),
+            columnas["fecha_pago"]: mostrar_fecha(cheque.fecha_pago)
+        }
+
+        cambios = {}
+
+        for columna, valor_nuevo in normalizados.items():
+            valor_original = fila[columna]
+
+            if valor_original != valor_nuevo:
+                cambios[columna] = {
+                    "antes": valor_original,
+                    "despues": valor_nuevo
+                }
+
+        if cambios:
+            registro.append({
+                "origen": origen,
+                "fila": numero,
+                "estado": "modificada",
+                "cambios": cambios,
+                "original": original
+            })
+
+    return preparados, registro
