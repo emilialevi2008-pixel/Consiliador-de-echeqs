@@ -124,3 +124,35 @@ def detectar_duplicados(registros):
             duplicados[identificador] = filas
 
     return duplicados
+def buscar_candidatos(identificador_sistema, registros_banco):
+    """Busca coincidencias exactas o por prefijo del ID del sistema."""
+
+    if not isinstance(identificador_sistema, str):
+        raise ValueError("El identificador debe ser texto.")
+
+    if not identificador_sistema:
+        raise ValueError("El identificador no puede estar vacío.")
+
+    exactos = []
+
+    for registro in registros_banco:
+        identificador_banco = registro["cheque"].identificador
+
+        if identificador_banco == identificador_sistema:
+            exactos.append(registro)
+
+    if exactos:
+        return exactos
+
+    candidatos = []
+
+    for registro in registros_banco:
+        identificador_banco = registro["cheque"].identificador
+
+        if (
+            len(identificador_sistema) < len(identificador_banco)
+            and identificador_banco.startswith(identificador_sistema)
+        ):
+            candidatos.append(registro)
+
+    return candidatos

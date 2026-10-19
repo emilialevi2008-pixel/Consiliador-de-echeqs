@@ -5,7 +5,8 @@ from decimal import Decimal
 from src.pipeline import (
     convertir_fila,
     preparar_filas,
-    detectar_duplicados
+    detectar_duplicados,
+    buscar_candidatos
 )
 
 
@@ -161,6 +162,81 @@ class TestPipeline(unittest.TestCase):
         self.assertEqual(
             detectar_duplicados(preparados),
             {}
+        )
+    def test_buscar_id_abreviado_unico(self):
+        filas = [
+            {
+                "ID Cheque": "MKX9R4GYWZK9O6W",
+                "Fecha Pago": "19/10/2026",
+                "Importe": "15000.50"
+            }
+        ]
+
+        banco, _ = preparar_filas(filas, "banco")
+        candidatos = buscar_candidatos("MKX9R4GY", banco)
+
+        self.assertEqual(len(candidatos), 1)
+        self.assertEqual(
+            candidatos[0]["cheque"].identificador,
+            "MKX9R4GYWZK9O6W"
+        )
+
+    def test_buscar_id_abreviado_ambiguo(self):
+        filas = [
+            {
+                "ID Cheque": "MKX9R4GYWZK9O6W",
+                "Fecha Pago": "19/10/2026",
+                "Importe": "15000.50"
+            },
+            {
+                "ID Cheque": "MKX9R4GYABC1234",
+                "Fecha Pago": "20/10/2026",
+                "Importe": "20000.00"
+            }
+        ]
+
+        banco, _ = preparar_filas(filas, "banco")
+        candidatos = buscar_candidatos("MKX9R4GY", banco)
+
+        self.assertEqual(len(candidatos), 2)
+
+    def test_busqueda_exacta_tiene_prioridad(self):
+        filas = [
+            {
+                "ID Cheque": "MKX9R4GY",
+                "Fecha Pago": "19/10/2026",
+                "Importe": "15000.50"
+            },
+            {
+                "ID Cheque": "MKX9R4GYWZK9O6W",
+                "Fecha Pago": "19/10/2026",
+                "Importe": "15000.50"
+            }
+        ]
+
+        banco, _ = preparar_filas(filas, "banco")
+        candidatos = buscar_candidatos("MKX9R4GY", banco)
+
+        self.assertEqual(len(candidatos), 1)
+        self.assertEqual(
+            candidatos[0]["cheque"].identificador,
+            "MKX9R4GY"
+        )
+
+    def test_busqueda_sin_coincidencias(self):
+        filas = [
+            {
+                "ID Cheque": "ABC123XYZ",
+                "Fecha Pago": "19/10/2026",
+                "Importe": "15000.50"
+            }
+        ]
+
+        banco, _ = preparar_filas(filas, "banco")
+
+        self.assertEqual(
+            buscar_candidatos("MKX9R4GY", banco),
+            []
         )
         
 if __name__ == "__main__":
