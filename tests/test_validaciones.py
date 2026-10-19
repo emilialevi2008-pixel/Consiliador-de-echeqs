@@ -1,8 +1,12 @@
 import unittest
 from datetime import date, datetime
 
-from src.validaciones import convertir_fecha, mostrar_fecha
-
+from src.validaciones import (
+    convertir_fecha,
+    mostrar_fecha,
+    convertir_importe
+)
+from decimal import Decimal
 
 class TestValidaciones(unittest.TestCase):
 
@@ -33,6 +37,30 @@ class TestValidaciones(unittest.TestCase):
 
         self.assertEqual(resultado, date(2026, 2, 1))
 
+    def test_importe_con_punto(self):
+        resultado = convertir_importe("15000.50")
+        self.assertEqual(resultado, Decimal("15000.50"))
 
+    def test_importe_con_coma(self):
+        resultado = convertir_importe("15000,50")
+        self.assertEqual(resultado, Decimal("15000.50"))
+
+    def test_importe_numerico_de_excel(self):
+        resultado = convertir_importe(15000.50)
+        self.assertEqual(resultado, Decimal("15000.50"))
+
+    def test_importes_invalidos(self):
+        valores = [None, "", "-100", "abc", "15.000,50", "1.005"]
+
+        for valor in valores:
+            with self.subTest(valor=valor):
+                with self.assertRaises(ValueError):
+                    convertir_importe(valor)
+
+    def test_suma_exacta_de_importes(self):
+        primero = convertir_importe("0.10")
+        segundo = convertir_importe("0.20")
+
+        self.assertEqual(primero + segundo, Decimal("0.30"))
 if __name__ == "__main__":
     unittest.main()
