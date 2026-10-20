@@ -5,15 +5,46 @@ Autora: Emilia Agustina Levi.
 Trabajo Práctico 2 — Programación Orientada a Datos.
 Licenciatura en Ciencia de Datos — UCA.
 
-## Problema, usuarios y solución
+## Problema y procedimiento manual
 
-Comparar manualmente los cheques de un banco con los registrados en
-un sistema de gestión lleva tiempo y puede producir errores.
+Este proyecto surge de una tarea real: conciliar los cheques electrónicos
+registrados en un banco con los registrados en un sistema de gestión.
+La conciliación consiste en identificar los cheques que aparecen en ambas
+fuentes y comprobar si coinciden su identificador, fecha e importe.
 
-La aplicación está destinada a personas que realizan tareas
-administrativas o contables. Permite cargar dos archivos, comparar
-los cheques y obtener reportes de coincidencias, diferencias,
-registros sin contraparte y datos que requieren revisión.
+Antes de desarrollar la aplicación, realizaba esta tarea manualmente.
+Imprimía dos archivos Excel (.xlsx), uno del banco y otro del sistema.
+Luego buscaba los cheques en ambos listados, comparaba sus datos y marcaba
+con resaltador los que encontraba. También señalaba los que presentaban
+diferencias para revisarlos.
+
+Este procedimiento requería buscar los registros uno por uno y mantener
+el seguimiento de las marcas. Para identificar un cheque presente solamente
+en una fuente, también era necesario comprobar que no apareciera en la otra.
+Al recibir nuevos archivos, había que repetir la comparación.
+
+La revisión manual podía dar lugar a omisiones, confusiones entre registros
+o diferencias que pasaran inadvertidas.
+
+## Ventajas frente al procedimiento manual
+
+La aplicación automatiza la búsqueda y comparación de registros, aplica
+las mismas reglas a todos los cheques y genera resultados digitales que
+pueden guardarse y consultarse.
+
+En lugar de marcar cada cheque en papel, permite revisar un reporte donde
+se indican las coincidencias, las diferencias y las situaciones pendientes.
+También permite repetir el procesamiento con otros archivos.
+
+Los casos ambiguos o inválidos siguen requiriendo revisión humana.
+La aplicación sirve como apoyo al control: no modifica los archivos
+originales ni realiza operaciones bancarias.
+
+## Usuarios
+
+Está destinada a personas que realizan tareas administrativas o contables
+y necesitan controlar la correspondencia entre los cheques registrados
+en el banco y en su sistema de gestión.
 
 ## Funcionalidades
 
@@ -224,18 +255,37 @@ el comportamiento de la aplicación.
 
 ## Pruebas
 
-Desde la carpeta principal:
+Se utilizan seis pruebas automatizadas con unittest, de la biblioteca
+estándar de Python. Están en tests/test_conciliacion.py.
+
+Cada prueba prepara datos ficticios, ejecuta la comparación y comprueba
+el resultado esperado.
+
+| Caso | Qué se comprueba |
+| --- | --- |
+| Todos conciliados | Tres pares coincidentes, totales correctos y ninguna fila perdida o repetida. |
+| Ninguno conciliado | Todos los pares presentan diferencias de fecha e importe. |
+| Diferencia de fecha | Se detecta ERROR_FECHA y los otros pares siguen conciliados. |
+| Diferencia de ID | Se informan los registros sin contraparte en banco y sistema. |
+| Diferencia de importe | Se detecta ERROR_IMPORTE y se calcula banco menos sistema. |
+| Fecha imposible | Se rechaza el dato y se conserva su motivo para revisión. |
+
+La selección incluye un caso normal, una entrada inválida y una propiedad
+relevante del resultado: la conservación de las filas.
+
+La explicación detallada de los datos, los pasos y las comprobaciones
+de cada caso está en [PRUEBAS.md](PRUEBAS.md).
+
+Desde la carpeta principal, ejecutar:
 
 ```bash
 python3 -m unittest discover -s tests -v
 ```
 
-Las pruebas incluyen casos normales, entradas inválidas, equivalencia
-de lectura CSV/JSON, lectura Excel, precisión monetaria, fechas,
-duplicados, ambigüedades y generación de reportes.
+El resultado esperado es Ran 6 tests y OK.
 
-También comprueban que cada fila de entrada conserve una referencia
-en los resultados y que un mismo registro no se cuente dos veces.
+Estas pruebas verifican los escenarios descriptos; no garantizan ausencia
+de errores en todas las situaciones posibles.
 
 ## Datos y procedencia
 

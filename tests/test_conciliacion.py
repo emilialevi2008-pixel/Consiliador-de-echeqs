@@ -1,433 +1,333 @@
+import csv
+import json
+import tempfile
 import unittest
+from decimal import Decimal
+from pathlib import Path
 
-from src.pipeline import preparar_filas
-from src.conciliacion import (
-    conciliar_preparados,
-    resultado_rechazado,
-    indexar_ids_rechazados,
-    conciliar_filas
-)
-
-def conciliar_ids(ids_banco, ids_sistema):
-    """Prepara datos ficticios para las pruebas."""
-
-    filas_banco = [
-        {
-            "ID Cheque": codigo,
-            "Fecha Pago": "19/10/2026",
-            "Importe": "15000.50"
-        }
-        for codigo in ids_banco
-    ]
-
-    filas_sistema = [
-        {
-            "ID CHEQUE": codigo,
-            "FECHA DE COBRO": "19/10/2026",
-            "IMPORTE": "15000.50"
-        }
-        for codigo in ids_sistema
-    ]
-
-    banco, _ = preparar_filas(filas_banco, "banco")
-    sistema, _ = preparar_filas(filas_sistema, "sistema")
-
-    return conciliar_preparados(banco, sistema)
+from src.conciliacion import conciliar_filas
+from src.main import ejecutar_comparacion
 
 
-class TestConciliacion(unittest.TestCase):
+class TestEscenariosConciliacion(unittest.TestCase):
+    """Seis escenarios con datos ficticios y resultados conocidos."""
 
-    def test_coincidencia_exacta(self):
-        resultados = conciliar_ids(
-            ["ABC123"],
-            ["ABC123"]
-        )
-
-        self.assertEqual(len(resultados), 1)
-        self.assertEqual(
-            resultados[0]["estado"],
-            "CONCILIADO"
-        )
-
-    def test_coincidencia_abreviada(self):
-        resultados = conciliar_ids(
-            ["MKX9R4GYWZK9O6W"],
-            ["MKX9R4GY"]
-        )
-
-        self.assertEqual(len(resultados), 1)
-        self.assertEqual(
-            resultados[0]["estado"],
-            "CONCILIADO_ID_ABREVIADO"
-        )
-
-    def test_prefijo_con_varios_candidatos(self):
-        resultados = conciliar_ids(
-            ["MKX9R4GY111", "MKX9R4GY222"],
-            ["MKX9R4GY"]
-        )
-
-        estados = [r["estado"] for r in resultados]
-
-        self.assertEqual(
-            estados.count("COINCIDENCIA_AMBIGUA"), 1
-        )
-        self.assertEqual(
-            estados.count("PENDIENTE_REVISION"), 2
-        )
-
-    def test_duplicados_del_banco(self):
-        resultados = conciliar_ids(
-            ["ABC123", "ABC123"],
-            ["ABC123"]
-        )
-
-        estados = [r["estado"] for r in resultados]
-
-        self.assertEqual(estados.count("ID_DUPLICADO"), 2)
-        self.assertNotIn("CONCILIADO", estados)
-
-    def test_duplicados_del_sistema(self):
-        resultados = conciliar_ids(
-            ["ABC123"],
-            ["ABC123", "ABC123"]
-        )
-
-        estados = [r["estado"] for r in resultados]
-
-        self.assertEqual(estados.count("ID_DUPLICADO"), 2)
-        self.assertEqual(
-            estados.count("PENDIENTE_REVISION"), 1
-        )
-
-    def test_exacto_tiene_prioridad_sobre_abreviado(self):
-        resultados = conciliar_ids(
-            ["MKX9R4GYWZK9O6W"],
-            ["MKX9R4GY", "MKX9R4GYWZK9O6W"]
-        )
-
-        conciliados = [
-            r for r in resultados
-            if r["estado"] == "CONCILIADO"
-        ]
-
-        self.assertEqual(len(conciliados), 1)
-        self.assertEqual(
-            conciliados[0]["id_sistema"],
-            "MKX9R4GYWZK9O6W"
-        )
-        self.assertEqual(len(resultados), 2)
-
-    def test_dos_prefijos_compiten_por_el_mismo_banco(self):
-        resultados = conciliar_ids(
-            ["MKX9R4GYWZK9O6W"],
-            ["MKX9R4", "MKX9R4GY"]
-        )
-
-        estados = [r["estado"] for r in resultados]
-
-        self.assertEqual(
-            estados.count("COINCIDENCIA_AMBIGUA"), 2
-        )
-        self.assertEqual(
-            estados.count("PENDIENTE_REVISION"), 1
-        )
-        self.assertNotIn("CONCILIADO_ID_ABREVIADO", estados)
-
-    def test_cheques_sin_correspondencia(self):
-        resultados = conciliar_ids(
-            ["ABC123"],
-            ["XYZ789"]
-        )
-
-        estados = {r["estado"] for r in resultados}
-
-        self.assertEqual(
-            estados,
-            {"NO_ESTA_EN_BANCO", "NO_ESTA_EN_SISTEMA"}
-        )
-
-    def test_cada_fila_aparece_una_sola_vez(self):
-        resultados = conciliar_ids(
-            ["ABC123", "DEF456", "GHI789"],
-            ["ABC123", "DEF", "XYZ999"]
-        )
-
-        filas_banco = [
-            r["fila_banco"] for r in resultados
-            if r["fila_banco"] != ""
-        ]
-
-        filas_sistema = [
-            r["fila_sistema"] for r in resultados
-            if r["fila_sistema"] != ""
-        ]
-
-        self.assertEqual(sorted(filas_banco), [1, 2, 3])
-        self.assertEqual(sorted(filas_sistema), [1, 2, 3])
-
-    def test_resultado_de_fila_bancaria_rechazada(self):
-        filas = [
+    def setUp(self):
+        """Prepara tres pares válidos antes de cada prueba."""
+        self.banco = [
             {
                 "ID Cheque": "ABC123",
                 "Fecha Pago": "19/10/2026",
-                "Importe": "-100.00"
-            }
-        ]
-
-        preparados, registro = preparar_filas(filas, "banco")
-        resultado = resultado_rechazado(registro[0])
-
-        self.assertEqual(preparados, [])
-        self.assertEqual(resultado["estado"], "DATOS_INVALIDOS")
-        self.assertEqual(resultado["id_banco"], "ABC123")
-        self.assertEqual(resultado["importe_banco"], "-100.00")
-        self.assertEqual(resultado["fila_banco"], 1)
-        self.assertEqual(resultado["fila_sistema"], "")
-        self.assertEqual(resultado["diferencia_importe"], "")
-        self.assertIn("negativo", resultado["descripcion"])
-
-    def test_resultado_rechazado_con_columna_faltante(self):
-        fila = {
-            "ID CHEQUE": "MKX9R4GY",
-            "IMPORTE": "0.00"
-        }
-
-        copia = fila.copy()
-
-        preparados, registro = preparar_filas(
-            [fila], "sistema"
-        )
-
-        resultado = resultado_rechazado(registro[0])
-
-        self.assertEqual(preparados, [])
-        self.assertEqual(resultado["id_sistema"], "MKX9R4GY")
-        self.assertEqual(resultado["importe_sistema"], "0.00")
-        self.assertEqual(resultado["fecha_sistema"], "")
-        self.assertEqual(resultado["fila_sistema"], 1)
-        self.assertIn("FECHA DE COBRO", resultado["descripcion"])
-        self.assertEqual(fila, copia)
-    def test_indexar_ids_rechazados_y_conservar_sus_filas(self):
-        filas = [
-            {
-                "ID Cheque": "ABC123",
-                "Fecha Pago": "19/10/2026",
-                "Importe": "100"
+                "Importe": "100.00"
             },
             {
-                "ID Cheque": " MKX9R4GYWZK9O6W ",
-                "Fecha Pago": "19/10/2026",
-                "Importe": "-100"
+                "ID Cheque": "DEF456",
+                "Fecha Pago": "20/10/2026",
+                "Importe": "200.00"
             },
             {
                 "ID Cheque": "MKX9R4GYWZK9O6W",
-                "Fecha Pago": "31/02/2026",
-                "Importe": "100"
+                "Fecha Pago": "21/10/2026",
+                "Importe": "300.50"
             }
         ]
 
-        preparados, registro = preparar_filas(filas, "banco")
-
-        indice = indexar_ids_rechazados(registro, "banco")
-
-        self.assertEqual(len(preparados), 1)
-        self.assertEqual(
-            indice,
-            {"MKX9R4GYWZK9O6W": [2, 3]}
-        )
-        self.assertNotIn("ABC123", indice)
-
-    def test_no_inventar_ids_ni_mezclar_origenes(self):
-        filas = [
+        self.sistema = [
             {
-                "ID CHEQUE": None,
+                "ID CHEQUE": "ABC123",
                 "FECHA DE COBRO": "19/10/2026",
-                "IMPORTE": "100"
+                "IMPORTE": "100.00"
             },
             {
-                "ID CHEQUE": "???",
-                "FECHA DE COBRO": "19/10/2026",
-                "IMPORTE": "100"
+                "ID CHEQUE": "DEF456",
+                "FECHA DE COBRO": "20/10/2026",
+                "IMPORTE": "200.00"
             },
             {
-                "ID CHEQUE": "SISTEMA123",
-                "FECHA DE COBRO": "19/10/2026",
-                "IMPORTE": "-100"
+                "ID CHEQUE": "MKX9R4GY",
+                "FECHA DE COBRO": "21/10/2026",
+                "IMPORTE": "300.50"
             }
         ]
 
-        preparados, registro = preparar_filas(filas, "sistema")
+    def test_todos_los_cheques_conciliados(self):
+        """Los archivos coincidentes producen tres pares sin errores."""
+        with tempfile.TemporaryDirectory() as temporal:
+            carpeta = Path(temporal)
+            ruta_banco = carpeta / "banco.csv"
+            ruta_sistema = carpeta / "sistema.json"
+            salida = carpeta / "reportes"
 
-        self.assertEqual(preparados, [])
-        self.assertEqual(len(registro), 3)
+            with open(
+                ruta_banco, "w", encoding="utf-8", newline=""
+            ) as archivo:
+                escritor = csv.DictWriter(
+                    archivo,
+                    fieldnames=self.banco[0].keys()
+                )
+                escritor.writeheader()
+                escritor.writerows(self.banco)
 
-        self.assertEqual(
-            indexar_ids_rechazados(registro, "sistema"),
-            {"SISTEMA123": [3]}
-        )
+            with open(
+                ruta_sistema, "w", encoding="utf-8"
+            ) as archivo:
+                json.dump(self.sistema, archivo)
 
-        self.assertEqual(
-            indexar_ids_rechazados(registro, "banco"),
-            {}
-        )
-    def crear_fila(self, identificador, origen, importe="100.00"):
-        """Crea una fila ficticia para estas pruebas."""
+            resultados, importes = ejecutar_comparacion(
+                ruta_banco, ruta_sistema, salida
+            )
 
-        if origen == "banco":
-            return {
-                "ID Cheque": identificador,
-                "Fecha Pago": "19/10/2026",
-                "Importe": importe
+            self.assertEqual(len(resultados), 3)
+
+            por_id = {
+                fila["id_banco"]: fila
+                for fila in resultados
             }
 
-        return {
-            "ID CHEQUE": identificador,
-            "FECHA DE COBRO": "19/10/2026",
-            "IMPORTE": importe
+            self.assertEqual(
+                por_id["ABC123"]["estado"], "CONCILIADO"
+            )
+            self.assertEqual(
+                por_id["DEF456"]["estado"], "CONCILIADO"
+            )
+            self.assertEqual(
+                por_id["MKX9R4GYWZK9O6W"]["estado"],
+                "CONCILIADO_ID_ABREVIADO"
+            )
+
+            # Ninguna fila debe perderse ni utilizarse dos veces.
+            self.assertEqual(
+                sorted(f["fila_banco"] for f in resultados),
+                [1, 2, 3]
+            )
+            self.assertEqual(
+                sorted(f["fila_sistema"] for f in resultados),
+                [1, 2, 3]
+            )
+
+            self.assertEqual(
+                importes["total_banco"], Decimal("600.50")
+            )
+            self.assertEqual(
+                importes["total_sistema"], Decimal("600.50")
+            )
+            self.assertEqual(
+                importes["importe_conciliado"], Decimal("600.50")
+            )
+            self.assertEqual(
+                importes["diferencia"], Decimal("0.00")
+            )
+
+            with open(
+                salida / "cheques_con_errores.csv",
+                encoding="utf-8-sig",
+                newline=""
+            ) as archivo:
+                lector = csv.DictReader(archivo)
+                self.assertIn("estado", lector.fieldnames)
+                self.assertEqual(list(lector), [])
+
+    def test_ningun_cheque_conciliado(self):
+        """Todos los pares difieren en fecha e importe."""
+        for fila in self.sistema:
+            fila["FECHA DE COBRO"] = "01/11/2026"
+            fila["IMPORTE"] = "50.00"
+
+        resultados, _ = conciliar_filas(
+            self.banco, self.sistema
+        )
+
+        self.assertEqual(len(resultados), 3)
+        self.assertEqual(
+            [fila["estado"] for fila in resultados],
+            ["CON_DIFERENCIAS"] * 3
+        )
+
+        for fila in resultados:
+            self.assertEqual(
+                fila["tipo_error"],
+                "ERROR_IMPORTE|ERROR_FECHA"
+            )
+
+    def test_error_de_fecha(self):
+        """Una fecha distinta afecta solo al cheque correspondiente."""
+        self.sistema[0]["FECHA DE COBRO"] = "22/10/2026"
+
+        resultados, _ = conciliar_filas(
+            self.banco, self.sistema
+        )
+        por_id = {
+            fila["id_banco"]: fila
+            for fila in resultados
         }
 
-    def test_rechazado_no_fabrica_un_prefijo_unico(self):
-        banco = [
-            self.crear_fila("MKX9R4GY111", "banco"),
-            self.crear_fila("MKX9R4GY222", "banco", "-100")
-        ]
-        sistema = [
-            self.crear_fila("MKX9R4GY", "sistema")
-        ]
-
-        resultados, _ = conciliar_filas(banco, sistema)
-        estados = [r["estado"] for r in resultados]
-
-        self.assertIn("COINCIDENCIA_AMBIGUA", estados)
-        self.assertIn("DATOS_INVALIDOS", estados)
-        self.assertNotIn("CONCILIADO_ID_ABREVIADO", estados)
-
-    def test_duplicado_bancario_con_una_fila_rechazada(self):
-        banco = [
-            self.crear_fila("ABC123", "banco"),
-            self.crear_fila("ABC123", "banco", "-100")
-        ]
-        sistema = [
-            self.crear_fila("ABC123", "sistema")
-        ]
-
-        resultados, _ = conciliar_filas(banco, sistema)
-
-        duplicados = [
-            r for r in resultados
-            if "ID_DUPLICADO" in r["tipo_error"].split("|")
-        ]
-
-        self.assertEqual(len(duplicados), 2)
-        self.assertFalse(
-            any(r["estado"].startswith("CONCILIADO")
-                for r in resultados)
+        self.assertEqual(len(resultados), 3)
+        self.assertEqual(
+            por_id["ABC123"]["estado"], "ERROR_FECHA"
+        )
+        self.assertEqual(
+            por_id["ABC123"]["tipo_error"], "ERROR_FECHA"
+        )
+        self.assertEqual(
+            por_id["ABC123"]["fecha_banco"], "19/10/2026"
+        )
+        self.assertEqual(
+            por_id["ABC123"]["fecha_sistema"], "22/10/2026"
+        )
+        self.assertEqual(
+            por_id["ABC123"]["diferencia_importe"], "0.00"
+        )
+        self.assertEqual(
+            por_id["DEF456"]["estado"], "CONCILIADO"
+        )
+        self.assertEqual(
+            por_id["MKX9R4GYWZK9O6W"]["estado"],
+            "CONCILIADO_ID_ABREVIADO"
         )
 
-    def test_contraparte_invalida_no_se_informa_como_ausente(self):
-        banco = [
-            self.crear_fila("ABC123", "banco")
-        ]
-        sistema = [
-            self.crear_fila("ABC123", "sistema", "-100")
+    def test_error_de_id(self):
+        """IDs sin relación no se emparejan por fecha e importe."""
+        self.sistema[0]["ID CHEQUE"] = "XYZ999"
+
+        resultados, _ = conciliar_filas(
+            self.banco, self.sistema
+        )
+        estados = [
+            fila["estado"] for fila in resultados
         ]
 
-        resultados, _ = conciliar_filas(banco, sistema)
-        estados = {r["estado"] for r in resultados}
-
-        self.assertEqual(
+        # El par sin correspondencia genera dos registros individuales.
+        self.assertEqual(len(resultados), 4)
+        self.assertCountEqual(
             estados,
-            {"PENDIENTE_REVISION", "DATOS_INVALIDOS"}
+            [
+                "CONCILIADO",
+                "CONCILIADO_ID_ABREVIADO",
+                "NO_ESTA_EN_BANCO",
+                "NO_ESTA_EN_SISTEMA"
+            ]
         )
 
-    def test_exacto_valido_no_se_bloquea_por_otro_id(self):
-        banco = [
-            self.crear_fila("MKX9R4GY", "banco"),
-            self.crear_fila("MKX9R4GY999", "banco", "-100")
-        ]
-        sistema = [
-            self.crear_fila("MKX9R4GY", "sistema")
-        ]
-
-        resultados, _ = conciliar_filas(banco, sistema)
-        estados = [r["estado"] for r in resultados]
-
-        self.assertEqual(estados.count("CONCILIADO"), 1)
-        self.assertEqual(estados.count("DATOS_INVALIDOS"), 1)
-
-    def test_rechazados_sin_id_conservan_sus_filas(self):
-        banco = [
-            self.crear_fila(None, "banco")
-        ]
-        sistema = [
-            self.crear_fila("???", "sistema")
-        ]
-
-        resultados, auditoria = conciliar_filas(banco, sistema)
-
-        self.assertEqual(len(resultados), 2)
-        self.assertEqual(len(auditoria), 2)
-
-        filas_banco = [
-            r["fila_banco"] for r in resultados
-            if r["fila_banco"] != ""
-        ]
-        filas_sistema = [
-            r["fila_sistema"] for r in resultados
-            if r["fila_sistema"] != ""
-        ]
-
-        self.assertEqual(filas_banco, [1])
-        self.assertEqual(filas_sistema, [1])
-
-    def test_duplicado_contable_con_una_fila_rechazada(self):
-        banco = [
-            self.crear_fila("ABC123", "banco")
-        ]
-        sistema = [
-            self.crear_fila("ABC123", "sistema"),
-            self.crear_fila("ABC123", "sistema", "-100")
-        ]
-
-        resultados, _ = conciliar_filas(banco, sistema)
-
-        duplicados = [
-            r for r in resultados
-            if "ID_DUPLICADO" in r["tipo_error"].split("|")
-        ]
-
-        self.assertEqual(len(duplicados), 2)
-        self.assertIn(
-            "PENDIENTE_REVISION",
-            [r["estado"] for r in resultados]
+        sin_banco = next(
+            f for f in resultados
+            if f["estado"] == "NO_ESTA_EN_BANCO"
         )
-
-    def test_exacto_invalido_no_se_reemplaza_por_un_prefijo(self):
-        banco = [
-            self.crear_fila("ABC123", "banco", "-100"),
-            self.crear_fila("ABC123XYZ", "banco")
-        ]
-        sistema = [
-            self.crear_fila("ABC123", "sistema")
-        ]
-
-        resultados, _ = conciliar_filas(banco, sistema)
-
-        self.assertFalse(
-            any(r["estado"].startswith("CONCILIADO")
-                for r in resultados)
+        sin_sistema = next(
+            f for f in resultados
+            if f["estado"] == "NO_ESTA_EN_SISTEMA"
         )
-
-        resultado_sistema = [
-            r for r in resultados
-            if r["fila_sistema"] == 1
-        ]
 
         self.assertEqual(
-            resultado_sistema[0]["estado"],
-            "PENDIENTE_REVISION"
+            sin_banco["id_sistema"], "XYZ999"
         )
-        
+        self.assertEqual(
+            sin_banco["fila_sistema"], 1
+        )
+        self.assertEqual(
+            sin_banco["id_banco"], ""
+        )
+        self.assertEqual(
+            sin_sistema["id_banco"], "ABC123"
+        )
+        self.assertEqual(
+            sin_sistema["fila_banco"], 1
+        )
+        self.assertEqual(
+            sin_sistema["id_sistema"], ""
+        )
+
+    def test_error_de_importe(self):
+        """Se detecta el importe distinto y se calcula la diferencia."""
+        self.sistema[0]["IMPORTE"] = "90.00"
+
+        resultados, _ = conciliar_filas(
+            self.banco, self.sistema
+        )
+        por_id = {
+            fila["id_banco"]: fila
+            for fila in resultados
+        }
+
+        self.assertEqual(len(resultados), 3)
+        self.assertEqual(
+            por_id["ABC123"]["estado"], "ERROR_IMPORTE"
+        )
+        self.assertEqual(
+            por_id["ABC123"]["tipo_error"], "ERROR_IMPORTE"
+        )
+        self.assertEqual(
+            por_id["ABC123"]["importe_banco"], "100.00"
+        )
+        self.assertEqual(
+            por_id["ABC123"]["importe_sistema"], "90.00"
+        )
+        self.assertEqual(
+            por_id["ABC123"]["diferencia_importe"], "10.00"
+        )
+        self.assertEqual(
+            por_id["DEF456"]["estado"], "CONCILIADO"
+        )
+        self.assertEqual(
+            por_id["MKX9R4GYWZK9O6W"]["estado"],
+            "CONCILIADO_ID_ABREVIADO"
+        )
+
+    def test_fecha_invalida_se_registra_para_revision(self):
+        """Una fecha imposible se rechaza conservando fila y motivo."""
+        self.sistema[0]["FECHA DE COBRO"] = "31/02/2026"
+
+        resultados, auditoria = conciliar_filas(
+            self.banco, self.sistema
+        )
+        estados = [
+            fila["estado"] for fila in resultados
+        ]
+
+        self.assertEqual(len(resultados), 4)
+        self.assertCountEqual(
+            estados,
+            [
+                "CONCILIADO",
+                "CONCILIADO_ID_ABREVIADO",
+                "DATOS_INVALIDOS",
+                "PENDIENTE_REVISION"
+            ]
+        )
+
+        rechazos = [
+            fila for fila in auditoria
+            if fila["estado"] == "rechazada"
+        ]
+
+        self.assertEqual(len(rechazos), 1)
+        self.assertEqual(
+            rechazos[0]["origen"], "sistema"
+        )
+        self.assertEqual(
+            rechazos[0]["fila"], 1
+        )
+        self.assertEqual(
+            rechazos[0]["original"]["FECHA DE COBRO"],
+            "31/02/2026"
+        )
+        self.assertTrue(rechazos[0]["motivo"])
+
+        invalido = next(
+            f for f in resultados
+            if f["estado"] == "DATOS_INVALIDOS"
+        )
+        pendiente = next(
+            f for f in resultados
+            if f["estado"] == "PENDIENTE_REVISION"
+        )
+
+        self.assertEqual(
+            invalido["id_sistema"], "ABC123"
+        )
+        self.assertEqual(
+            pendiente["id_banco"], "ABC123"
+        )
+
+
 if __name__ == "__main__":
     unittest.main()
