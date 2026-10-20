@@ -328,16 +328,18 @@ def conciliar_filas(filas_banco, filas_sistema):
             and codigo not in rechazados_sistema
         )
 
-        for codigo_rechazado in rechazados_sistema:
+    ids_problematicos = set(rechazados_sistema) | set(duplicados_sistema)
+
+    for codigo_problematico in ids_problematicos:
             candidatos = candidatos_entre_ids(
-                codigo_rechazado, todos_ids_banco
+                codigo_problematico, todos_ids_banco
             )
 
             if codigo in candidatos and not tiene_exacto_valido:
                 bloqueados_banco[registro["fila"]] = (
                     "PENDIENTE_REVISION",
-                    "Una fila contable rechazada podría corresponder "
-                    "a este cheque."
+                    "Una fila del sistema rechazada o duplicada "
+                    "podría corresponder a este cheque."
                 )
                 break
 

@@ -37,7 +37,7 @@ def convertir_para_json(valor):
     """Permite guardar importes exactos y fechas dentro del JSON."""
 
     if isinstance(valor, Decimal):
-        return format(valor, ".2f")
+        return str(valor)
 
     if isinstance(valor, date):
         return valor.strftime("%d/%m/%Y")
@@ -45,7 +45,6 @@ def convertir_para_json(valor):
     raise TypeError(
         f"No se puede guardar un valor de tipo {type(valor).__name__}."
     )
-
 
 def generar_reportes(carpeta, resultados, auditoria, resumen_importes):
     """Genera los reportes de una comparación."""
