@@ -1,8 +1,10 @@
 import unittest
 
 from src.pipeline import preparar_filas
-from src.conciliacion import conciliar_preparados
-
+from src.conciliacion import (
+    conciliar_preparados,
+    resultado_rechazado
+)
 
 def conciliar_ids(ids_banco, ids_sistema):
     """Prepara datos ficticios para las pruebas."""
@@ -162,6 +164,48 @@ class TestConciliacion(unittest.TestCase):
         self.assertEqual(sorted(filas_banco), [1, 2, 3])
         self.assertEqual(sorted(filas_sistema), [1, 2, 3])
 
+    def test_resultado_de_fila_bancaria_rechazada(self):
+        filas = [
+            {
+                "ID Cheque": "ABC123",
+                "Fecha Pago": "19/10/2026",
+                "Importe": "-100.00"
+            }
+        ]
 
+        preparados, registro = preparar_filas(filas, "banco")
+        resultado = resultado_rechazado(registro[0])
+
+        self.assertEqual(preparados, [])
+        self.assertEqual(resultado["estado"], "DATOS_INVALIDOS")
+        self.assertEqual(resultado["id_banco"], "ABC123")
+        self.assertEqual(resultado["importe_banco"], "-100.00")
+        self.assertEqual(resultado["fila_banco"], 1)
+        self.assertEqual(resultado["fila_sistema"], "")
+        self.assertEqual(resultado["diferencia_importe"], "")
+        self.assertIn("negativo", resultado["descripcion"])
+
+    def test_resultado_rechazado_con_columna_faltante(self):
+        fila = {
+            "ID CHEQUE": "MKX9R4GY",
+            "IMPORTE": "0.00"
+        }
+
+        copia = fila.copy()
+
+        preparados, registro = preparar_filas(
+            [fila], "sistema"
+        )
+
+        resultado = resultado_rechazado(registro[0])
+
+        self.assertEqual(preparados, [])
+        self.assertEqual(resultado["id_sistema"], "MKX9R4GY")
+        self.assertEqual(resultado["importe_sistema"], "0.00")
+        self.assertEqual(resultado["fecha_sistema"], "")
+        self.assertEqual(resultado["fila_sistema"], 1)
+        self.assertIn("FECHA DE COBRO", resultado["descripcion"])
+        self.assertEqual(fila, copia)
+        
 if __name__ == "__main__":
     unittest.main()

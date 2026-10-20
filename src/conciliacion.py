@@ -1,4 +1,5 @@
 from src.pipeline import (
+    COLUMNAS,
     detectar_duplicados,
     buscar_candidatos,
     comparar_registros
@@ -196,3 +197,41 @@ def conciliar_preparados(banco, sistema):
         )
 
     return resultados
+def resultado_rechazado(entrada):
+    """Conserva una fila rechazada y explica por qué no pudo procesarse."""
+
+    origen = entrada["origen"]
+    original = entrada["original"]
+    columnas = COLUMNAS[origen]
+
+    resultado = {
+        "id_banco": "",
+        "id_sistema": "",
+        "importe_banco": "",
+        "importe_sistema": "",
+        "diferencia_importe": "",
+        "fecha_banco": "",
+        "fecha_sistema": "",
+        "estado": "DATOS_INVALIDOS",
+        "tipo_error": "DATOS_INVALIDOS",
+        "descripcion": entrada["motivo"],
+        "fila_banco": "",
+        "fila_sistema": ""
+    }
+
+    campos = {
+        "identificador": f"id_{origen}",
+        "importe": f"importe_{origen}",
+        "fecha_pago": f"fecha_{origen}"
+    }
+
+    for campo, columna_resultado in campos.items():
+        nombre_original = columnas[campo]
+        valor = original.get(nombre_original)
+
+        if valor is not None:
+            resultado[columna_resultado] = str(valor)
+
+    resultado[f"fila_{origen}"] = entrada["fila"]
+
+    return resultado
