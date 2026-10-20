@@ -1,0 +1,802 @@
+[
+    {
+        "ID CHEQUE": "CH0001XYZ",
+        "FECHA DE EMISION": "18/10/2026",
+        "FECHA DE COBRO": "19/10/2026",
+        "BANCO": "Banco ficticio",
+        "TITULAR": "Empresa ficticia 001",
+        "IMPORTE": "1025.50"
+    },
+    {
+        "ID CHEQUE": "CH0002XYZ",
+        "FECHA DE EMISION": "18/10/2026",
+        "FECHA DE COBRO": "20/10/2026",
+        "BANCO": "Banco ficticio",
+        "TITULAR": "Empresa ficticia 002",
+        "IMPORTE": "1051.00"
+    },
+    {
+        "ID CHEQUE": "CH0003XYZ",
+        "FECHA DE EMISION": "18/10/2026",
+        "FECHA DE COBRO": "21/10/2026",
+        "BANCO": "Banco ficticio",
+        "TITULAR": "Empresa ficticia 003",
+        "IMPORTE": "1086.50"
+    },
+    {
+        "ID CHEQUE": "CH0004",
+        "FECHA DE EMISION": "18/10/2026",
+        "FECHA DE COBRO": "22/10/2026",
+        "BANCO": "Banco ficticio",
+        "TITULAR": "Empresa ficticia 004",
+        "IMPORTE": "1102.00"
+    },
+    {
+        "ID CHEQUE": "CH0005XYZ",
+        "FECHA DE EMISION": "18/10/2026",
+        "FECHA DE COBRO": "24/10/2026",
+        "BANCO": "Banco ficticio",
+        "TITULAR": "Empresa ficticia 005",
+        "IMPORTE": "1127.50"
+    },
+    {
+        "ID CHEQUE": "CH0006XYZ",
+        "FECHA DE EMISION": "18/10/2026",
+        "FECHA DE COBRO": "26/10/2026",
+        "BANCO": "Banco ficticio",
+        "TITULAR": "Empresa ficticia 006",
+        "IMPORTE": "1173.00"
+    },
+    {
+        "ID CHEQUE": "EXTRA0008",
+        "FECHA DE EMISION": "18/10/2026",
+        "FECHA DE COBRO": "26/10/2026",
+        "BANCO": "Banco ficticio",
+        "TITULAR": "Empresa ficticia 008",
+        "IMPORTE": "1204.00"
+    },
+    {
+        "ID CHEQUE": "CH0009XYZ",
+        "FECHA DE EMISION": "18/10/2026",
+        "FECHA DE COBRO": "27/10/2026",
+        "BANCO": "Banco ficticio",
+        "TITULAR": "Empresa ficticia 009",
+        "IMPORTE": "1229.50"
+    },
+    {
+        "ID CHEQUE": "CH0010XYZ",
+        "FECHA DE EMISION": "18/10/2026",
+        "FECHA DE COBRO": "28/10/2026",
+        "BANCO": "Banco ficticio",
+        "TITULAR": "Empresa ficticia 010",
+        "IMPORTE": "1255.00"
+    },
+    {
+        "ID CHEQUE": "CH0011XYZ",
+        "FECHA DE EMISION": "18/10/2026",
+        "FECHA DE COBRO": "29/10/2026",
+        "BANCO": "Banco ficticio",
+        "TITULAR": "Empresa ficticia 011",
+        "IMPORTE": "1280.50"
+    },
+    {
+        "ID CHEQUE": "CH0012",
+        "FECHA DE EMISION": "18/10/2026",
+        "FECHA DE COBRO": "30/10/2026",
+        "BANCO": "Banco ficticio",
+        "TITULAR": "Empresa ficticia 012",
+        "IMPORTE": "1306.00"
+    },
+    {
+        "ID CHEQUE": "CH0013XYZ",
+        "FECHA DE EMISION": "18/10/2026",
+        "FECHA DE COBRO": "31/10/2026",
+        "BANCO": "Banco ficticio",
+        "TITULAR": "Empresa ficticia 013",
+        "IMPORTE": "1331.50"
+    },
+    {
+        "ID CHEQUE": "CH0013XYZ",
+        "FECHA DE EMISION": "18/10/2026",
+        "FECHA DE COBRO": "31/10/2026",
+        "BANCO": "Banco ficticio",
+        "TITULAR": "Empresa ficticia 013",
+        "IMPORTE": "1331.50"
+    },
+    {
+        "ID CHEQUE": "CH0014XYZ",
+        "FECHA DE EMISION": "18/10/2026",
+        "FECHA DE COBRO": "01/11/2026",
+        "BANCO": "Banco ficticio",
+        "TITULAR": "Empresa ficticia 014",
+        "IMPORTE": "1357.00"
+    },
+    {
+        "ID CHEQUE": "CH0015XYZ",
+        "FECHA DE EMISION": "18/10/2026",
+        "FECHA DE COBRO": "02/11/2026",
+        "BANCO": "Banco ficticio",
+        "TITULAR": "Empresa ficticia 015",
+        "IMPORTE": "1382.50"
+    },
+    {
+        "ID CHEQUE": "CH0016",
+        "FECHA DE EMISION": "18/10/2026",
+        "FECHA DE COBRO": "03/11/2026",
+        "BANCO": "Banco ficticio",
+        "TITULAR": "Empresa ficticia 016",
+        "IMPORTE": "1408.00"
+    },
+    {
+        "ID CHEQUE": "CH0017XYZ",
+        "FECHA DE EMISION": "18/10/2026",
+        "FECHA DE COBRO": "04/11/2026",
+        "BANCO": "Banco ficticio",
+        "TITULAR": "Empresa ficticia 017",
+        "IMPORTE": "1433.50"
+    },
+    {
+        "ID CHEQUE": "CH0018XYZ",
+        "FECHA DE EMISION": "18/10/2026",
+        "FECHA DE COBRO": "05/11/2026",
+        "BANCO": "Banco ficticio",
+        "TITULAR": "Empresa ficticia 018",
+        "IMPORTE": "1459.00"
+    },
+    {
+        "ID CHEQUE": "CH0019XYZ",
+        "FECHA DE EMISION": "18/10/2026",
+        "FECHA DE COBRO": "06/11/2026",
+        "BANCO": "Banco ficticio",
+        "TITULAR": "Empresa ficticia 019",
+        "IMPORTE": "1484.50"
+    },
+    {
+        "ID CHEQUE": "CH0020",
+        "FECHA DE EMISION": "18/10/2026",
+        "FECHA DE COBRO": "07/11/2026",
+        "BANCO": "Banco ficticio",
+        "TITULAR": "Empresa ficticia 020",
+        "IMPORTE": "1510.00"
+    },
+    {
+        "ID CHEQUE": "CH0021XYZ",
+        "FECHA DE EMISION": "18/10/2026",
+        "FECHA DE COBRO": "08/11/2026",
+        "BANCO": "Banco ficticio",
+        "TITULAR": "Empresa ficticia 021",
+        "IMPORTE": "1535.50"
+    },
+    {
+        "ID CHEQUE": "CH0022XYZ",
+        "FECHA DE EMISION": "18/10/2026",
+        "FECHA DE COBRO": "09/11/2026",
+        "BANCO": "Banco ficticio",
+        "TITULAR": "Empresa ficticia 022",
+        "IMPORTE": "1561.00"
+    },
+    {
+        "ID CHEQUE": "CH0023XYZ",
+        "FECHA DE EMISION": "18/10/2026",
+        "FECHA DE COBRO": "10/11/2026",
+        "BANCO": "Banco ficticio",
+        "TITULAR": "Empresa ficticia 023",
+        "IMPORTE": "1586.50"
+    },
+    {
+        "ID CHEQUE": "CH0024",
+        "FECHA DE EMISION": "18/10/2026",
+        "FECHA DE COBRO": "11/11/2026",
+        "BANCO": "Banco ficticio",
+        "TITULAR": "Empresa ficticia 024",
+        "IMPORTE": "1612.00"
+    },
+    {
+        "ID CHEQUE": "CH0025XYZ",
+        "FECHA DE EMISION": "18/10/2026",
+        "FECHA DE COBRO": "12/11/2026",
+        "BANCO": "Banco ficticio",
+        "TITULAR": "Empresa ficticia 025",
+        "IMPORTE": "1637.50"
+    },
+    {
+        "ID CHEQUE": "CH0026XYZ",
+        "FECHA DE EMISION": "18/10/2026",
+        "FECHA DE COBRO": "13/11/2026",
+        "BANCO": "Banco ficticio",
+        "TITULAR": "Empresa ficticia 026",
+        "IMPORTE": "1663.00"
+    },
+    {
+        "ID CHEQUE": "CH0027XYZ",
+        "FECHA DE EMISION": "18/10/2026",
+        "FECHA DE COBRO": "14/11/2026",
+        "BANCO": "Banco ficticio",
+        "TITULAR": "Empresa ficticia 027",
+        "IMPORTE": "1688.50"
+    },
+    {
+        "ID CHEQUE": "CH0028",
+        "FECHA DE EMISION": "18/10/2026",
+        "FECHA DE COBRO": "15/11/2026",
+        "BANCO": "Banco ficticio",
+        "TITULAR": "Empresa ficticia 028",
+        "IMPORTE": "1714.00"
+    },
+    {
+        "ID CHEQUE": "CH0029XYZ",
+        "FECHA DE EMISION": "18/10/2026",
+        "FECHA DE COBRO": "16/11/2026",
+        "BANCO": "Banco ficticio",
+        "TITULAR": "Empresa ficticia 029",
+        "IMPORTE": "1739.50"
+    },
+    {
+        "ID CHEQUE": "CH0030XYZ",
+        "FECHA DE EMISION": "18/10/2026",
+        "FECHA DE COBRO": "17/11/2026",
+        "BANCO": "Banco ficticio",
+        "TITULAR": "Empresa ficticia 030",
+        "IMPORTE": "1765.00"
+    },
+    {
+        "ID CHEQUE": "CH0031XYZ",
+        "FECHA DE EMISION": "18/10/2026",
+        "FECHA DE COBRO": "18/11/2026",
+        "BANCO": "Banco ficticio",
+        "TITULAR": "Empresa ficticia 031",
+        "IMPORTE": "1790.50"
+    },
+    {
+        "ID CHEQUE": "CH0032",
+        "FECHA DE EMISION": "18/10/2026",
+        "FECHA DE COBRO": "19/11/2026",
+        "BANCO": "Banco ficticio",
+        "TITULAR": "Empresa ficticia 032",
+        "IMPORTE": "1816.00"
+    },
+    {
+        "ID CHEQUE": "CH0033XYZ",
+        "FECHA DE EMISION": "18/10/2026",
+        "FECHA DE COBRO": "20/11/2026",
+        "BANCO": "Banco ficticio",
+        "TITULAR": "Empresa ficticia 033",
+        "IMPORTE": "1841.50"
+    },
+    {
+        "ID CHEQUE": "CH0034XYZ",
+        "FECHA DE EMISION": "18/10/2026",
+        "FECHA DE COBRO": "21/11/2026",
+        "BANCO": "Banco ficticio",
+        "TITULAR": "Empresa ficticia 034",
+        "IMPORTE": "1867.00"
+    },
+    {
+        "ID CHEQUE": "CH0035XYZ",
+        "FECHA DE EMISION": "18/10/2026",
+        "FECHA DE COBRO": "22/11/2026",
+        "BANCO": "Banco ficticio",
+        "TITULAR": "Empresa ficticia 035",
+        "IMPORTE": "1892.50"
+    },
+    {
+        "ID CHEQUE": "CH0036",
+        "FECHA DE EMISION": "18/10/2026",
+        "FECHA DE COBRO": "23/11/2026",
+        "BANCO": "Banco ficticio",
+        "TITULAR": "Empresa ficticia 036",
+        "IMPORTE": "1918.00"
+    },
+    {
+        "ID CHEQUE": "CH0037XYZ",
+        "FECHA DE EMISION": "18/10/2026",
+        "FECHA DE COBRO": "24/11/2026",
+        "BANCO": "Banco ficticio",
+        "TITULAR": "Empresa ficticia 037",
+        "IMPORTE": "1943.50"
+    },
+    {
+        "ID CHEQUE": "CH0038XYZ",
+        "FECHA DE EMISION": "18/10/2026",
+        "FECHA DE COBRO": "25/11/2026",
+        "BANCO": "Banco ficticio",
+        "TITULAR": "Empresa ficticia 038",
+        "IMPORTE": "1969.00"
+    },
+    {
+        "ID CHEQUE": "CH0039XYZ",
+        "FECHA DE EMISION": "18/10/2026",
+        "FECHA DE COBRO": "26/11/2026",
+        "BANCO": "Banco ficticio",
+        "TITULAR": "Empresa ficticia 039",
+        "IMPORTE": "1994.50"
+    },
+    {
+        "ID CHEQUE": "CH0040",
+        "FECHA DE EMISION": "18/10/2026",
+        "FECHA DE COBRO": "27/11/2026",
+        "BANCO": "Banco ficticio",
+        "TITULAR": "Empresa ficticia 040",
+        "IMPORTE": "2020.00"
+    },
+    {
+        "ID CHEQUE": "CH0041XYZ",
+        "FECHA DE EMISION": "18/10/2026",
+        "FECHA DE COBRO": "28/11/2026",
+        "BANCO": "Banco ficticio",
+        "TITULAR": "Empresa ficticia 041",
+        "IMPORTE": "2045.50"
+    },
+    {
+        "ID CHEQUE": "CH0042XYZ",
+        "FECHA DE EMISION": "18/10/2026",
+        "FECHA DE COBRO": "29/11/2026",
+        "BANCO": "Banco ficticio",
+        "TITULAR": "Empresa ficticia 042",
+        "IMPORTE": "2071.00"
+    },
+    {
+        "ID CHEQUE": "CH0043XYZ",
+        "FECHA DE EMISION": "18/10/2026",
+        "FECHA DE COBRO": "30/11/2026",
+        "BANCO": "Banco ficticio",
+        "TITULAR": "Empresa ficticia 043",
+        "IMPORTE": "2096.50"
+    },
+    {
+        "ID CHEQUE": "CH0044",
+        "FECHA DE EMISION": "18/10/2026",
+        "FECHA DE COBRO": "01/12/2026",
+        "BANCO": "Banco ficticio",
+        "TITULAR": "Empresa ficticia 044",
+        "IMPORTE": "2122.00"
+    },
+    {
+        "ID CHEQUE": "CH0045XYZ",
+        "FECHA DE EMISION": "18/10/2026",
+        "FECHA DE COBRO": "02/12/2026",
+        "BANCO": "Banco ficticio",
+        "TITULAR": "Empresa ficticia 045",
+        "IMPORTE": "2147.50"
+    },
+    {
+        "ID CHEQUE": "CH0046XYZ",
+        "FECHA DE EMISION": "18/10/2026",
+        "FECHA DE COBRO": "03/12/2026",
+        "BANCO": "Banco ficticio",
+        "TITULAR": "Empresa ficticia 046",
+        "IMPORTE": "2173.00"
+    },
+    {
+        "ID CHEQUE": "CH0047XYZ",
+        "FECHA DE EMISION": "18/10/2026",
+        "FECHA DE COBRO": "04/12/2026",
+        "BANCO": "Banco ficticio",
+        "TITULAR": "Empresa ficticia 047",
+        "IMPORTE": "2198.50"
+    },
+    {
+        "ID CHEQUE": "CH0048",
+        "FECHA DE EMISION": "18/10/2026",
+        "FECHA DE COBRO": "05/12/2026",
+        "BANCO": "Banco ficticio",
+        "TITULAR": "Empresa ficticia 048",
+        "IMPORTE": "2224.00"
+    },
+    {
+        "ID CHEQUE": "CH0049XYZ",
+        "FECHA DE EMISION": "18/10/2026",
+        "FECHA DE COBRO": "06/12/2026",
+        "BANCO": "Banco ficticio",
+        "TITULAR": "Empresa ficticia 049",
+        "IMPORTE": "2249.50"
+    },
+    {
+        "ID CHEQUE": "CH0050XYZ",
+        "FECHA DE EMISION": "18/10/2026",
+        "FECHA DE COBRO": "07/12/2026",
+        "BANCO": "Banco ficticio",
+        "TITULAR": "Empresa ficticia 050",
+        "IMPORTE": "2275.00"
+    },
+    {
+        "ID CHEQUE": "CH0051XYZ",
+        "FECHA DE EMISION": "18/10/2026",
+        "FECHA DE COBRO": "08/12/2026",
+        "BANCO": "Banco ficticio",
+        "TITULAR": "Empresa ficticia 051",
+        "IMPORTE": "2300.50"
+    },
+    {
+        "ID CHEQUE": "CH0052",
+        "FECHA DE EMISION": "18/10/2026",
+        "FECHA DE COBRO": "09/12/2026",
+        "BANCO": "Banco ficticio",
+        "TITULAR": "Empresa ficticia 052",
+        "IMPORTE": "2326.00"
+    },
+    {
+        "ID CHEQUE": "CH0053XYZ",
+        "FECHA DE EMISION": "18/10/2026",
+        "FECHA DE COBRO": "10/12/2026",
+        "BANCO": "Banco ficticio",
+        "TITULAR": "Empresa ficticia 053",
+        "IMPORTE": "2351.50"
+    },
+    {
+        "ID CHEQUE": "CH0054XYZ",
+        "FECHA DE EMISION": "18/10/2026",
+        "FECHA DE COBRO": "11/12/2026",
+        "BANCO": "Banco ficticio",
+        "TITULAR": "Empresa ficticia 054",
+        "IMPORTE": "2377.00"
+    },
+    {
+        "ID CHEQUE": "CH0055XYZ",
+        "FECHA DE EMISION": "18/10/2026",
+        "FECHA DE COBRO": "12/12/2026",
+        "BANCO": "Banco ficticio",
+        "TITULAR": "Empresa ficticia 055",
+        "IMPORTE": "2402.50"
+    },
+    {
+        "ID CHEQUE": "CH0056",
+        "FECHA DE EMISION": "18/10/2026",
+        "FECHA DE COBRO": "13/12/2026",
+        "BANCO": "Banco ficticio",
+        "TITULAR": "Empresa ficticia 056",
+        "IMPORTE": "2428.00"
+    },
+    {
+        "ID CHEQUE": "CH0057XYZ",
+        "FECHA DE EMISION": "18/10/2026",
+        "FECHA DE COBRO": "14/12/2026",
+        "BANCO": "Banco ficticio",
+        "TITULAR": "Empresa ficticia 057",
+        "IMPORTE": "2453.50"
+    },
+    {
+        "ID CHEQUE": "CH0058XYZ",
+        "FECHA DE EMISION": "18/10/2026",
+        "FECHA DE COBRO": "15/12/2026",
+        "BANCO": "Banco ficticio",
+        "TITULAR": "Empresa ficticia 058",
+        "IMPORTE": "2479.00"
+    },
+    {
+        "ID CHEQUE": "CH0059XYZ",
+        "FECHA DE EMISION": "18/10/2026",
+        "FECHA DE COBRO": "16/12/2026",
+        "BANCO": "Banco ficticio",
+        "TITULAR": "Empresa ficticia 059",
+        "IMPORTE": "2504.50"
+    },
+    {
+        "ID CHEQUE": "CH0060",
+        "FECHA DE EMISION": "18/10/2026",
+        "FECHA DE COBRO": "17/12/2026",
+        "BANCO": "Banco ficticio",
+        "TITULAR": "Empresa ficticia 060",
+        "IMPORTE": "2530.00"
+    },
+    {
+        "ID CHEQUE": "CH0061XYZ",
+        "FECHA DE EMISION": "18/10/2026",
+        "FECHA DE COBRO": "18/12/2026",
+        "BANCO": "Banco ficticio",
+        "TITULAR": "Empresa ficticia 061",
+        "IMPORTE": "2555.50"
+    },
+    {
+        "ID CHEQUE": "CH0062XYZ",
+        "FECHA DE EMISION": "18/10/2026",
+        "FECHA DE COBRO": "19/12/2026",
+        "BANCO": "Banco ficticio",
+        "TITULAR": "Empresa ficticia 062",
+        "IMPORTE": "2581.00"
+    },
+    {
+        "ID CHEQUE": "CH0063XYZ",
+        "FECHA DE EMISION": "18/10/2026",
+        "FECHA DE COBRO": "20/12/2026",
+        "BANCO": "Banco ficticio",
+        "TITULAR": "Empresa ficticia 063",
+        "IMPORTE": "2606.50"
+    },
+    {
+        "ID CHEQUE": "CH0064",
+        "FECHA DE EMISION": "18/10/2026",
+        "FECHA DE COBRO": "21/12/2026",
+        "BANCO": "Banco ficticio",
+        "TITULAR": "Empresa ficticia 064",
+        "IMPORTE": "2632.00"
+    },
+    {
+        "ID CHEQUE": "CH0065XYZ",
+        "FECHA DE EMISION": "18/10/2026",
+        "FECHA DE COBRO": "22/12/2026",
+        "BANCO": "Banco ficticio",
+        "TITULAR": "Empresa ficticia 065",
+        "IMPORTE": "2657.50"
+    },
+    {
+        "ID CHEQUE": "CH0066XYZ",
+        "FECHA DE EMISION": "18/10/2026",
+        "FECHA DE COBRO": "23/12/2026",
+        "BANCO": "Banco ficticio",
+        "TITULAR": "Empresa ficticia 066",
+        "IMPORTE": "2683.00"
+    },
+    {
+        "ID CHEQUE": "CH0067XYZ",
+        "FECHA DE EMISION": "18/10/2026",
+        "FECHA DE COBRO": "24/12/2026",
+        "BANCO": "Banco ficticio",
+        "TITULAR": "Empresa ficticia 067",
+        "IMPORTE": "2708.50"
+    },
+    {
+        "ID CHEQUE": "CH0068",
+        "FECHA DE EMISION": "18/10/2026",
+        "FECHA DE COBRO": "25/12/2026",
+        "BANCO": "Banco ficticio",
+        "TITULAR": "Empresa ficticia 068",
+        "IMPORTE": "2734.00"
+    },
+    {
+        "ID CHEQUE": "CH0069XYZ",
+        "FECHA DE EMISION": "18/10/2026",
+        "FECHA DE COBRO": "26/12/2026",
+        "BANCO": "Banco ficticio",
+        "TITULAR": "Empresa ficticia 069",
+        "IMPORTE": "2759.50"
+    },
+    {
+        "ID CHEQUE": "CH0070XYZ",
+        "FECHA DE EMISION": "18/10/2026",
+        "FECHA DE COBRO": "27/12/2026",
+        "BANCO": "Banco ficticio",
+        "TITULAR": "Empresa ficticia 070",
+        "IMPORTE": "2785.00"
+    },
+    {
+        "ID CHEQUE": "CH0071XYZ",
+        "FECHA DE EMISION": "18/10/2026",
+        "FECHA DE COBRO": "28/12/2026",
+        "BANCO": "Banco ficticio",
+        "TITULAR": "Empresa ficticia 071",
+        "IMPORTE": "2810.50"
+    },
+    {
+        "ID CHEQUE": "CH0072",
+        "FECHA DE EMISION": "18/10/2026",
+        "FECHA DE COBRO": "29/12/2026",
+        "BANCO": "Banco ficticio",
+        "TITULAR": "Empresa ficticia 072",
+        "IMPORTE": "2836.00"
+    },
+    {
+        "ID CHEQUE": "CH0073XYZ",
+        "FECHA DE EMISION": "18/10/2026",
+        "FECHA DE COBRO": "30/12/2026",
+        "BANCO": "Banco ficticio",
+        "TITULAR": "Empresa ficticia 073",
+        "IMPORTE": "2861.50"
+    },
+    {
+        "ID CHEQUE": "CH0074XYZ",
+        "FECHA DE EMISION": "18/10/2026",
+        "FECHA DE COBRO": "31/12/2026",
+        "BANCO": "Banco ficticio",
+        "TITULAR": "Empresa ficticia 074",
+        "IMPORTE": "2887.00"
+    },
+    {
+        "ID CHEQUE": "CH0075XYZ",
+        "FECHA DE EMISION": "18/10/2026",
+        "FECHA DE COBRO": "01/01/2027",
+        "BANCO": "Banco ficticio",
+        "TITULAR": "Empresa ficticia 075",
+        "IMPORTE": "2912.50"
+    },
+    {
+        "ID CHEQUE": "CH0076",
+        "FECHA DE EMISION": "18/10/2026",
+        "FECHA DE COBRO": "02/01/2027",
+        "BANCO": "Banco ficticio",
+        "TITULAR": "Empresa ficticia 076",
+        "IMPORTE": "2938.00"
+    },
+    {
+        "ID CHEQUE": "CH0077XYZ",
+        "FECHA DE EMISION": "18/10/2026",
+        "FECHA DE COBRO": "03/01/2027",
+        "BANCO": "Banco ficticio",
+        "TITULAR": "Empresa ficticia 077",
+        "IMPORTE": "2963.50"
+    },
+    {
+        "ID CHEQUE": "CH0078XYZ",
+        "FECHA DE EMISION": "18/10/2026",
+        "FECHA DE COBRO": "04/01/2027",
+        "BANCO": "Banco ficticio",
+        "TITULAR": "Empresa ficticia 078",
+        "IMPORTE": "2989.00"
+    },
+    {
+        "ID CHEQUE": "CH0079XYZ",
+        "FECHA DE EMISION": "18/10/2026",
+        "FECHA DE COBRO": "05/01/2027",
+        "BANCO": "Banco ficticio",
+        "TITULAR": "Empresa ficticia 079",
+        "IMPORTE": "3014.50"
+    },
+    {
+        "ID CHEQUE": "CH0080",
+        "FECHA DE EMISION": "18/10/2026",
+        "FECHA DE COBRO": "06/01/2027",
+        "BANCO": "Banco ficticio",
+        "TITULAR": "Empresa ficticia 080",
+        "IMPORTE": "3040.00"
+    },
+    {
+        "ID CHEQUE": "CH0081XYZ",
+        "FECHA DE EMISION": "18/10/2026",
+        "FECHA DE COBRO": "07/01/2027",
+        "BANCO": "Banco ficticio",
+        "TITULAR": "Empresa ficticia 081",
+        "IMPORTE": "3065.50"
+    },
+    {
+        "ID CHEQUE": "CH0082XYZ",
+        "FECHA DE EMISION": "18/10/2026",
+        "FECHA DE COBRO": "08/01/2027",
+        "BANCO": "Banco ficticio",
+        "TITULAR": "Empresa ficticia 082",
+        "IMPORTE": "3091.00"
+    },
+    {
+        "ID CHEQUE": "CH0083XYZ",
+        "FECHA DE EMISION": "18/10/2026",
+        "FECHA DE COBRO": "09/01/2027",
+        "BANCO": "Banco ficticio",
+        "TITULAR": "Empresa ficticia 083",
+        "IMPORTE": "3116.50"
+    },
+    {
+        "ID CHEQUE": "CH0084",
+        "FECHA DE EMISION": "18/10/2026",
+        "FECHA DE COBRO": "10/01/2027",
+        "BANCO": "Banco ficticio",
+        "TITULAR": "Empresa ficticia 084",
+        "IMPORTE": "3142.00"
+    },
+    {
+        "ID CHEQUE": "CH0085XYZ",
+        "FECHA DE EMISION": "18/10/2026",
+        "FECHA DE COBRO": "11/01/2027",
+        "BANCO": "Banco ficticio",
+        "TITULAR": "Empresa ficticia 085",
+        "IMPORTE": "3167.50"
+    },
+    {
+        "ID CHEQUE": "CH0086XYZ",
+        "FECHA DE EMISION": "18/10/2026",
+        "FECHA DE COBRO": "12/01/2027",
+        "BANCO": "Banco ficticio",
+        "TITULAR": "Empresa ficticia 086",
+        "IMPORTE": "3193.00"
+    },
+    {
+        "ID CHEQUE": "CH0087XYZ",
+        "FECHA DE EMISION": "18/10/2026",
+        "FECHA DE COBRO": "13/01/2027",
+        "BANCO": "Banco ficticio",
+        "TITULAR": "Empresa ficticia 087",
+        "IMPORTE": "3218.50"
+    },
+    {
+        "ID CHEQUE": "CH0088",
+        "FECHA DE EMISION": "18/10/2026",
+        "FECHA DE COBRO": "14/01/2027",
+        "BANCO": "Banco ficticio",
+        "TITULAR": "Empresa ficticia 088",
+        "IMPORTE": "3244.00"
+    },
+    {
+        "ID CHEQUE": "CH0089XYZ",
+        "FECHA DE EMISION": "18/10/2026",
+        "FECHA DE COBRO": "15/01/2027",
+        "BANCO": "Banco ficticio",
+        "TITULAR": "Empresa ficticia 089",
+        "IMPORTE": "3269.50"
+    },
+    {
+        "ID CHEQUE": "CH0090XYZ",
+        "FECHA DE EMISION": "18/10/2026",
+        "FECHA DE COBRO": "16/01/2027",
+        "BANCO": "Banco ficticio",
+        "TITULAR": "Empresa ficticia 090",
+        "IMPORTE": "3295.00"
+    },
+    {
+        "ID CHEQUE": "CH0091XYZ",
+        "FECHA DE EMISION": "18/10/2026",
+        "FECHA DE COBRO": "17/01/2027",
+        "BANCO": "Banco ficticio",
+        "TITULAR": "Empresa ficticia 091",
+        "IMPORTE": "3320.50"
+    },
+    {
+        "ID CHEQUE": "CH0092",
+        "FECHA DE EMISION": "18/10/2026",
+        "FECHA DE COBRO": "18/01/2027",
+        "BANCO": "Banco ficticio",
+        "TITULAR": "Empresa ficticia 092",
+        "IMPORTE": "3346.00"
+    },
+    {
+        "ID CHEQUE": "CH0093XYZ",
+        "FECHA DE EMISION": "18/10/2026",
+        "FECHA DE COBRO": "19/01/2027",
+        "BANCO": "Banco ficticio",
+        "TITULAR": "Empresa ficticia 093",
+        "IMPORTE": "3371.50"
+    },
+    {
+        "ID CHEQUE": "CH0094XYZ",
+        "FECHA DE EMISION": "18/10/2026",
+        "FECHA DE COBRO": "20/01/2027",
+        "BANCO": "Banco ficticio",
+        "TITULAR": "Empresa ficticia 094",
+        "IMPORTE": "3397.00"
+    },
+    {
+        "ID CHEQUE": "CH0095XYZ",
+        "FECHA DE EMISION": "18/10/2026",
+        "FECHA DE COBRO": "21/01/2027",
+        "BANCO": "Banco ficticio",
+        "TITULAR": "Empresa ficticia 095",
+        "IMPORTE": "3422.50"
+    },
+    {
+        "ID CHEQUE": "CH0096",
+        "FECHA DE EMISION": "18/10/2026",
+        "FECHA DE COBRO": "22/01/2027",
+        "BANCO": "Banco ficticio",
+        "TITULAR": "Empresa ficticia 096",
+        "IMPORTE": "3448.00"
+    },
+    {
+        "ID CHEQUE": "CH0097XYZ",
+        "FECHA DE EMISION": "18/10/2026",
+        "FECHA DE COBRO": "23/01/2027",
+        "BANCO": "Banco ficticio",
+        "TITULAR": "Empresa ficticia 097",
+        "IMPORTE": "3473.50"
+    },
+    {
+        "ID CHEQUE": "CH0098XYZ",
+        "FECHA DE EMISION": "18/10/2026",
+        "FECHA DE COBRO": "24/01/2027",
+        "BANCO": "Banco ficticio",
+        "TITULAR": "Empresa ficticia 098",
+        "IMPORTE": "3499.00"
+    },
+    {
+        "ID CHEQUE": "CH0099XYZ",
+        "FECHA DE EMISION": "18/10/2026",
+        "FECHA DE COBRO": "25/01/2027",
+        "BANCO": "Banco ficticio",
+        "TITULAR": "Empresa ficticia 099",
+        "IMPORTE": "3524.50"
+    },
+    {
+        "ID CHEQUE": "CH0100",
+        "FECHA DE EMISION": "18/10/2026",
+        "FECHA DE COBRO": "26/01/2027",
+        "BANCO": "Banco ficticio",
+        "TITULAR": "Empresa ficticia 100",
+        "IMPORTE": "3550.00"
+    }
+]

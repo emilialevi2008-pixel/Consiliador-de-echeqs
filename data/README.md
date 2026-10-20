@@ -1,46 +1,93 @@
-# Datos de prueba del conciliador
+# Datos de prueba
 
 ## Procedencia
 
-Se utilizarán datos ficticios generados para este trabajo.
-No se incluirán datos bancarios reales ni información personal sensible.
+Los archivos son ficticios y se generan con `src/generar_datos.py`.
+No provienen de cuentas bancarias ni de personas reales.
 
-Responsable: Emilia Agustina Levi.
+Responsable del conjunto de prueba: Emilia Agustina Levi.
+Fecha de documentación: 20/10/2026.
+No corresponde una URL ni fecha de consulta externa porque los datos
+se construyen mediante un procedimiento incluido en el proyecto.
 
-## Qué representa cada fila
+Condiciones de uso: los ejemplos se pueden utilizar y modificar
+para pruebas y actividades educativas. No representan operaciones reales.
 
-Cada fila representa un registro de un cheque en el archivo del
-banco o del sistema de gestión. Puede haber registros duplicados.
+## Generación reproducible
 
-## Columnas del sistema
+Desde la carpeta principal del proyecto:
 
-- ID CHEQUE: identificador del cheque.
-- FECHA DE EMISION: fecha en que se emitió.
-- FECHA DE COBRO: fecha prevista para cobrarlo.
-- BANCO: banco indicado en el sistema.
-- TITULAR: titular registrado.
-- IMPORTE: valor del cheque en pesos argentinos.
+    python3 -m src.generar_datos
 
-## Columnas del banco
+El comando crea:
 
-- ID Cheque: identificador del cheque.
-- Nombre o Razón Social Emisor: emisor registrado.
-- Historial de Endosos: información de los endosos.
-- Fecha Emisión: fecha en que se emitió.
-- Fecha Pago: fecha prevista para pagarlo.
-- Importe: valor del cheque en pesos argentinos.
+- `data/ejemplos/banco.csv`: 101 registros.
+- `data/ejemplos/sistema.json`: 100 registros.
 
-## Reglas de comparación
+El procedimiento no utiliza números aleatorios. Al repetirlo se obtienen
+los mismos datos y se reemplazan estos dos archivos de ejemplo.
 
-Se compararán el identificador, el importe y la fecha de cobro
-del sistema con la fecha de pago del banco.
+## Unidad de análisis
 
-Las fechas se mostrarán en DD/MM/AAAA.
-Los identificadores se conservarán como texto.
-Los importes se calcularán con Decimal para evitar errores de precisión.
+Cada fila u objeto representa un registro de un cheque electrónico
+en una fuente. Un mismo cheque puede aparecer en ambas fuentes.
+
+Se agregan duplicados intencionales para probar su detección.
+
+## Variables bancarias
+
+| Columna | Contenido |
+| --- | --- |
+| ID Cheque | Identificador alfanumérico del cheque |
+| Nombre o Razón Social Emisor | Nombre ficticio del emisor |
+| Historial de Endosos | Información complementaria ficticia |
+| Fecha Emisión | Fecha de emisión |
+| Fecha Pago | Fecha de pago utilizada en la comparación |
+| Importe | Importe monetario del registro |
+
+## Variables del sistema
+
+| Columna | Contenido |
+| --- | --- |
+| ID CHEQUE | Identificador completo o abreviado |
+| FECHA DE EMISION | Fecha de emisión |
+| FECHA DE COBRO | Fecha comparada con Fecha Pago del banco |
+| BANCO | Nombre ficticio del banco |
+| TITULAR | Nombre ficticio del titular |
+| IMPORTE | Importe monetario del registro |
+
+## Formatos y unidades
+
+Los importes de prueba representan pesos argentinos y se expresan
+sin separadores de miles, con hasta dos decimales.
+
+Las fechas de texto se expresan como DD/MM/AAAA.
+El programa también admite fechas ISO AAAA-MM-DD y fechas nativas de Excel.
+
+Los identificadores se conservan como texto para mantener letras
+y posibles ceros iniciales.
+
+El CSV utiliza coma como separador y una primera fila con encabezados.
+El JSON contiene una lista de objetos.
+Para Excel se admite .xlsx, con encabezados en la primera fila
+de la primera hoja.
+
+## Casos incluidos
+
+Hay coincidencias exactas, identificadores abreviados, diferencias de
+importe y fecha, registros sin contraparte, duplicados y datos inválidos.
+
+Los errores son intencionales: permiten comprobar que el programa
+los informa y conserva la referencia al registro original.
 
 ## Limitaciones
 
-Los datos ficticios servirán para probar el programa.
-No representan operaciones reales ni permiten sacar conclusiones
-sobre la actividad de un banco.
+Los ejemplos sirven para verificar reglas del programa; no representan
+la distribución de operaciones de un banco ni permiten medir su precisión
+sobre datos bancarios reales.
+
+El historial de endosos y los nombres son información complementaria:
+no se utilizan como criterios automáticos de conciliación.
+
+La comparación supone que ambos archivos expresan importes en la misma
+moneda. El programa no convierte monedas.
