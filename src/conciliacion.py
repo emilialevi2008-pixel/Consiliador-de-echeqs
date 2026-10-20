@@ -321,16 +321,15 @@ def conciliar_filas(filas_banco, filas_sistema):
                 "El ID aparece en varias filas bancarias."
             )
             continue
-
         tiene_exacto_valido = (
             codigo in ids_sistema_validos
             and codigo not in duplicados_sistema
             and codigo not in rechazados_sistema
         )
 
-    ids_problematicos = set(rechazados_sistema) | set(duplicados_sistema)
+        ids_problematicos = set(rechazados_sistema) | set(duplicados_sistema)
 
-    for codigo_problematico in ids_problematicos:
+        for codigo_problematico in ids_problematicos:
             candidatos = candidatos_entre_ids(
                 codigo_problematico, todos_ids_banco
             )
@@ -342,6 +341,7 @@ def conciliar_filas(filas_banco, filas_sistema):
                     "podría corresponder a este cheque."
                 )
                 break
+        
 
     ids_banco_bloqueados = {
         registro["cheque"].identificador

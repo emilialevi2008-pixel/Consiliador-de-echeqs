@@ -29,6 +29,11 @@ class TestRevisionFinal(unittest.TestCase):
 
     def test_exacto_duplicado_impide_conciliar_otro_prefijo(self):
         banco = crear_banco()
+        banco.append({
+            "ID Cheque": "OTRO456",
+            "Importe": "100.00",
+            "Fecha Pago": "18/01/2027"
+        })
         sistema = crear_sistema([
             "ABC123XYZ", "ABC123XYZ", "ABC123"
         ])
