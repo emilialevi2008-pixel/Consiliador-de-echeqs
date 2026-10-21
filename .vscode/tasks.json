@@ -1,0 +1,33 @@
+
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Ejecutar conciliador",
+      "type": "shell",
+      "command": "python3",
+      "args": [
+        "-m", "src.main",
+        "--banco", "data/ejemplos/banco.csv",
+        "--sistema", "data/ejemplos/sistema.json"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Ejecutar pruebas",
+      "type": "shell",
+      "command": "python3",
+      "args": [
+        "-m", "unittest", "discover",
+        "-s", "tests", "-v"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": []
+    }
+  ]
+}

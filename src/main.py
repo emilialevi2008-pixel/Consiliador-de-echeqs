@@ -8,6 +8,7 @@ from src.conciliacion import conciliar_filas
 from src.fuentes import FuenteCSV, FuenteJSON, FuenteExcel
 from src.importes import resumir_importes
 from src.reportes import generar_reportes
+from src.excel_coloreado import generar_excel_coloreado
 
 
 def cargar_archivo(ruta):
@@ -53,6 +54,8 @@ def ejecutar_comparacion(ruta_banco, ruta_sistema, carpeta_salida):
         auditoria,
         importes
     )
+
+    generar_excel_coloreado(carpeta_salida)
 
     return resultados, importes
 
